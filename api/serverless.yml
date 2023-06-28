@@ -1,7 +1,9 @@
 service: thumbnail-generator
+frameworkVersion: '3'
 
 custom:
   tableName: ${self:service}-${opt:stage, self:provider.stage}
+  bucketName: ${self:service}-${opt:stage, self:provider.stage}-bucket
   dynamodb:
     stages:
       - dev
@@ -18,28 +20,28 @@ provider:
   iamRoleStatements:
     - Effect: Allow
       Action:
-        - dynamodb:Query
-        - dynamodb:Scan
-        - dynamodb:GetItem
-        - dynamodb:PutItem
-        - dynamodb:UpdateItem
-        - dynamodb:DeleteItem
+        - dynamodb:*
       Resource:
-        - { "Fn::GetAtt": ["UsersDynamoDBTable", "Arn"] }
+        - 'arn:aws:dynamodb:${self:provider.region}:*:table/${self:custom.tableName}'
+    - Effect: Allow
+      Action:
+        - s3:*
+      Resource:
+        - 'arn:aws:s3:::${self:custom.bucketName}/*'
   environment:
     USERS_TABLE: ${self:custom.tableName}
+    BUCKET_NAME: ${self:custom.bucketName}
 
 functions:
   app:
     handler: dist/index.handler
     events:
-      - http: ANY /
-      - http: "ANY /{proxy+}"
+      - httpApi: '*'
 
 resources:
   Resources:
-    UsersDynamoDBTable:
-      Type: "AWS::DynamoDB::Table"
+    UsersTable:
+      Type: 'AWS::DynamoDB::Table'
       Properties:
         AttributeDefinitions:
           - AttributeName: userId
@@ -51,6 +53,10 @@ resources:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
         TableName: ${self:custom.tableName}
+    ImagesBucket:
+      Type: 'AWS::S3::Bucket'
+      Properties:
+        BucketName: ${self:custom.bucketName}
 
 plugins:
   - serverless-offline
