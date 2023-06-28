@@ -43,6 +43,7 @@ resources:
     UsersTable:
       Type: 'AWS::DynamoDB::Table'
       Properties:
+        TableName: ${self:custom.tableName}
         AttributeDefinitions:
           - AttributeName: userId
             AttributeType: S
@@ -52,7 +53,6 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
-        TableName: ${self:custom.tableName}
     ImagesBucket:
       Type: 'AWS::S3::Bucket'
       Properties:

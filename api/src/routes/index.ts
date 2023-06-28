@@ -1,15 +1,17 @@
-import express, { Request, Response } from 'express';
+import express from 'express';
 import authRouter from './auth.route';
-import usersRouter from './users.route';
 import imagesRouter from './images.route';
+import { usersController } from '../controllers';
+import config from '../config/config';
 
 const router = express.Router();
 
 router.use('/auth', authRouter);
-router.use('/users', usersRouter);
 router.use('/images', imagesRouter);
 
-router.get('/', (req: Request, res: Response) => res.json({ message: 'Hello World!' }));
-router.get('/is-offline', (req, res) => res.json({ message: `Is offline: ${process.env.IS_OFFLINE}` }));
+router.get('/', (_, res) => res.json({ message: 'Hello World!' }));
+router.get('/is-offline', (_, res) => res.json({ message: `Is offline: ${config.isOffline === 'true'}` }));
+router.get('/users/', usersController.getUsers);
+router.get('/users/:userId', usersController.getUser);
 
 export default router;
