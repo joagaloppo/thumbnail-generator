@@ -4,7 +4,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const envVarsSchema = z.object({
-  IS_OFFLINE: z.string(),
+  IS_OFFLINE: z.string().default('false'),
   USERS_TABLE: z.string(),
   BUCKET_NAME: z.string(),
   JWT_SECRET: z.string(),

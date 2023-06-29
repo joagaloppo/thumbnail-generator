@@ -1,36 +1,27 @@
 import { Request, Response } from 'express';
 import catchAsync from '../utils/catchAsync';
-import config from '../config/config';
-import upload from '../config/multer';
-import s3 from '../config/bucket';
+import ApiError from '../utils/ApiError';
+import utils from '../utils/image';
 
-const { bucketName } = config;
+const sizes = [
+  { name: 'small', w: 200, h: 100 },
+  { name: 'medium', w: 300, h: 200 },
+  { name: 'large', w: 400, h: 300 },
+];
 
 const uploadImage = catchAsync(async (req: Request, res: Response) => {
-  upload(req, res, async (err) => {
-    if (err) {
-      if (err.code === 'LIMIT_FILE_SIZE') return res.status(400).json({ error: 'File size too large.' });
-      return res.status(400).json({ error: err.message });
-    }
+  utils.process(req, res, async (err) => {
+    if (err) throw new ApiError(400, err.message);
+    if (!req.file) throw new ApiError(400, 'No image provided');
 
-    if (!req.file) return res.status(500).json({ error: 'No file provided.' });
+    const name = Math.random().toString(36).substring(2, 10);
+    const { buffer, mimetype } = req.file as Express.Multer.File;
+    const files = await Promise.all(sizes.map((size) => utils.resize(buffer, size.w, size.h)));
+    const urls = await Promise.all(files.map((e, i) => utils.upload(e, `${name}-${sizes[i].name}`, mimetype)));
 
-    const uploadParams = {
-      ACL: 'public-read',
-      Bucket: bucketName,
-      Body: req.file.buffer,
-      Key: req.file.originalname,
-      ContentType: req.file.mimetype,
-    };
-
-    try {
-      const data = await s3.upload(uploadParams).promise();
-      res.json({ message: 'File uploaded successfully.', data });
-    } catch (error) {
-      res.status(500).json({ message: 'Error uploading file to S3.' });
-    }
-
-    return null;
+    return res.status(200).json({
+      images: { small: urls[0].Location, medium: urls[1].Location, large: urls[2].Location },
+    });
   });
 });
 

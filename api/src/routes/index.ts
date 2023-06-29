@@ -1,4 +1,5 @@
 import express from 'express';
+import passport from 'passport';
 import authRouter from './auth.route';
 import imagesRouter from './images.route';
 import { usersController } from '../controllers';
@@ -13,5 +14,8 @@ router.get('/', (_, res) => res.json({ message: 'Hello World!' }));
 router.get('/is-offline', (_, res) => res.json({ message: `Is offline: ${config.isOffline === 'true'}` }));
 router.get('/users/', usersController.getUsers);
 router.get('/users/:userId', usersController.getUser);
+router.get('/me', passport.authenticate('jwt', { session: false }), (req, res) => {
+  res.json(req.user);
+});
 
 export default router;
