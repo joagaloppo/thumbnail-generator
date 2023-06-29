@@ -9,6 +9,7 @@ const storage = multer.memoryStorage();
 const process = multer({
   storage,
   fileFilter: (_, file, cb) => {
+    if (!file) cb(new Error('No file provided.'));
     const ext = path.extname(file.originalname);
     if (ext === '.jpg' || ext === '.jpeg' || ext === '.png') cb(null, true);
     else cb(new Error('Only images in JPG, JPEG or PNG format are allowed.'));
