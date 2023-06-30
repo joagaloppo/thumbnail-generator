@@ -8,7 +8,10 @@ const Footer: React.FC<FooterProps> = () => {
       <div className="mx-auto flex h-full max-h-[70px] w-full max-w-screen-lg flex-col items-center justify-center gap-1">
         <span className="text-sm text-slate-500">Made with ❤️ by Joaquin Galoppo</span>
         <span className="text-sm text-slate-500">
-          © 2023 - <a href="http://joagaloppo.com/">joagaloppo.com</a>
+          © 2023 -{' '}
+          <a className="underline underline-offset-2" href="http://joagaloppo.com/">
+            joagaloppo.com
+          </a>
         </span>
       </div>
     </footer>
