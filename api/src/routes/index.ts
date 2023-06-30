@@ -12,7 +12,6 @@ router.use('/images', imagesRouter);
 
 router.get('/', (_, res) => res.json({ message: 'Hello World!' }));
 router.get('/me', passport.authenticate('jwt', { session: false }), (req, res) => res.json(req.user));
-router.get('/is-offline', (_, res) => res.json({ message: `Is offline: ${config.isOffline === 'true'}` }));
 router.get('/users/', usersController.getUsers);
 router.get('/users/:userId', usersController.getUser);
 

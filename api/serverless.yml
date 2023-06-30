@@ -61,3 +61,4 @@ resources:
 plugins:
   - serverless-offline
   - serverless-dynamodb-local
+  - serverless-dotenv-plugin
