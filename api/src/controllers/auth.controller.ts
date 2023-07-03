@@ -13,11 +13,16 @@ const register = catchAsync(async (req: Request, res: Response) => {
   const { Item } = await db.get(getParams).promise();
   if (Item) return res.status(400).json({ message: 'A user with this email already exists' });
 
-  // Create user and return
+  // Create user in the database
   const hash = bcrypt.hashSync(password, 8);
   const params = { TableName: config.usersTable, Item: { userId, email, password: hash } };
   await db.put(params).promise();
-  return res.status(201).json({ message: 'User created successfully' });
+
+  // Create token after registering the user
+  const payload = { sub: userId, iat: Date.now() };
+  const token = jwt.sign(payload, config.jwtSecret);
+
+  return res.status(201).json({ token, user: { userId, email } });
 });
 
 const login = catchAsync(async (req: Request, res: Response) => {
