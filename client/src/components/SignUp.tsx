@@ -7,11 +7,13 @@ import Spinner from './Spinner';
 
 interface SignUpProps {
   children?: React.ReactNode;
+  open: boolean;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setSignIn: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const SignUp: React.FC<SignUpProps> = () => {
+const SignUp: React.FC<SignUpProps> = ({ open, setOpen, setSignIn }) => {
   const navigate = useNavigate();
-  const [open, setOpen] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [username, setUsername] = useState('');
@@ -47,11 +49,6 @@ const SignUp: React.FC<SignUpProps> = () => {
 
   return (
     <Dialog.Root open={open} onOpenChange={handleOpenChange}>
-      <Dialog.Trigger asChild>
-        <button className="rounded-full border border-primary bg-primary px-4 py-2 text-sm text-white transition hover:bg-primary-600">
-          Get Started
-        </button>
-      </Dialog.Trigger>
       {open && (
         <Dialog.Portal forceMount>
           <Dialog.Overlay asChild forceMount>
@@ -141,9 +138,15 @@ const SignUp: React.FC<SignUpProps> = () => {
                   <div className="flex justify-center pb-2">
                     <p className="text-sm text-slate-500">
                       Already have an account?{' '}
-                      <a href="#" className="text-primary underline-offset-2 hover:underline ">
+                      <button
+                        onClick={() => {
+                          handleOpenChange();
+                          setSignIn(true);
+                        }}
+                        className="text-primary underline-offset-2 hover:underline "
+                      >
                         Sign in
-                      </a>
+                      </button>
                     </p>
                   </div>
                 </div>
