@@ -94,7 +94,7 @@ const DropZone: React.FC<DropZoneProps> = ({ setFile }) => {
         <label
           className={clsx(
             ' flex h-64 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 hover:bg-gray-100',
-            dragging && 'border-primary bg-blue-50 hover:bg-blue-100'
+            dragging && 'border-primary-300 bg-primary-100 text-primary hover:bg-blue-100'
           )}
           ref={dropRef}
         >
@@ -103,7 +103,7 @@ const DropZone: React.FC<DropZoneProps> = ({ setFile }) => {
             <p className="mb-2 text-sm text-gray-500 ">
               <span className="font-semibold">Click to upload</span> or drag and drop
             </p>
-            <p className="text-xs text-gray-500 ">PNG or JPG (MAX. 5 MB)</p>
+            <p className="text-xs text-gray-500">PNG or JPG (MAX. 5 MB)</p>
           </div>
           <input className="hidden" type="file" onChange={handleChange} />
         </label>

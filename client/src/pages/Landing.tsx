@@ -1,6 +1,8 @@
 import axios from 'axios';
 import React, { useState } from 'react';
 import Cookies from 'js-cookie';
+import SignUp from '../components/SignUp';
+import SignIn from '../components/SignIn';
 
 interface LandingProps {
   children?: React.ReactNode;
@@ -24,31 +26,10 @@ const Landing: React.FC<LandingProps> = () => {
 
   return (
     <section className="min-h-[calc(100svh_-_148px)] px-4 py-8 lg:min-h-[calc(100svh_-_164px)]">
-      <form
-        className="mx-auto flex w-full max-w-2xl flex-col items-center justify-center gap-4"
-        onSubmit={(e) => handleLogin(e)}
-      >
-        <input
-          className="w-full rounded-sm border border-gray-300 p-4 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-gray-300"
-          type="text"
-          placeholder="Username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-        />
-        <input
-          className="w-full rounded-sm border border-gray-300 p-4 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-gray-300"
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <button
-          className="w-full rounded-sm border border-gray-300 p-4 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-gray-300"
-          type="submit"
-        >
-          Login
-        </button>
-      </form>
+      <div className="mx-auto flex w-full max-w-md justify-center gap-2">
+        <SignUp />
+        <SignIn />
+      </div>
     </section>
   );
 };

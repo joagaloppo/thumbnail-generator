@@ -8,7 +8,7 @@ const Upload = lazy(() => import('./pages/Upload'));
 function AppRoutes() {
   return (
     <BrowserRouter>
-      <Suspense fallback={<div className="min-h-[calc(100svh_-_144px)] px-4 lg:min-h-[calc(100svh_-_168px)]"></div>}>
+      <Suspense fallback={<div className="min-h-[calc(100svh_-_148px)] px-4 py-8 lg:min-h-[calc(100svh_-_164px)]" />}>
         <Routes>
           <Route
             path="/upload"
