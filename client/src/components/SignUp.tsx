@@ -1,8 +1,7 @@
 import { useState } from 'react';
 import * as Dialog from '@radix-ui/react-dialog';
 import axios from 'axios';
-import Cookies from 'js-cookie';
-import { useNavigate } from 'react-router-dom';
+import { useCookies } from 'react-cookie';
 import Spinner from './Spinner';
 
 interface SignUpProps {
@@ -13,7 +12,7 @@ interface SignUpProps {
 }
 
 const SignUp: React.FC<SignUpProps> = ({ open, setOpen, setSignIn }) => {
-  const navigate = useNavigate();
+  const [cookies, setCookie] = useCookies(['access_token']);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [username, setUsername] = useState('');
@@ -30,8 +29,8 @@ const SignUp: React.FC<SignUpProps> = ({ open, setOpen, setSignIn }) => {
         email,
         password,
       });
-      Cookies.set('access_token', res.data.token);
-      navigate('/upload');
+      setCookie('access_token', res.data.token);
+      setOpen(false);
     } catch (err: any) {
       setError(err.response.data.message);
     } finally {
@@ -86,7 +85,7 @@ const SignUp: React.FC<SignUpProps> = ({ open, setOpen, setSignIn }) => {
                 </div>
               )}
 
-              <form className="space-y-4" onSubmit={(e) => handleSubmit(e)}>
+              <form className="space-y-4 focus:outline-none" onSubmit={(e) => handleSubmit(e)}>
                 <input
                   type="text"
                   disabled={loading}
@@ -111,7 +110,7 @@ const SignUp: React.FC<SignUpProps> = ({ open, setOpen, setSignIn }) => {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
-                  className="block w-full rounded-md border bg-gray-50 p-2.5 text-sm text-gray-900"
+                  className="block w-full rounded-md border bg-gray-50 p-2.5 text-sm text-gray-900 focus:outline-none"
                   required
                 />
                 <div className="flex items-center gap-2">
@@ -124,11 +123,11 @@ const SignUp: React.FC<SignUpProps> = ({ open, setOpen, setSignIn }) => {
                   <button
                     disabled={loading}
                     type="submit"
-                    className="w-full rounded-full bg-primary py-2.5 text-center text-sm font-medium text-white hover:bg-primary-600 disabled:cursor-not-allowed disabled:opacity-50"
+                    className="w-full rounded-full bg-primary py-2.5 text-center text-sm font-medium text-white hover:bg-primary-900 disabled:cursor-not-allowed disabled:opacity-50"
                   >
                     {loading ? (
                       <div className="flex w-full items-center justify-center gap-2 text-center">
-                        <span>Sign Up</span>
+                        <span>Register</span>
                         <Spinner className="w-4" theme="light" />
                       </div>
                     ) : (
@@ -145,7 +144,7 @@ const SignUp: React.FC<SignUpProps> = ({ open, setOpen, setSignIn }) => {
                         }}
                         className="text-primary underline-offset-2 hover:underline "
                       >
-                        Sign in
+                        Login
                       </button>
                     </p>
                   </div>

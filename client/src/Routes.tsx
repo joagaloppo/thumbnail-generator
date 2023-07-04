@@ -1,32 +1,26 @@
-import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { lazy, Suspense } from 'react';
 import Spinner from './components/Spinner';
+import useAuth from './hooks/isAuth';
 
-const Auth = lazy(() => import('./components/ProtectedRoute'));
 const Upload = lazy(() => import('./pages/Upload'));
 const Landing = lazy(() => import('./pages/Landing'));
 
+const Fallback = () => {
+  return (
+    <div className="flex min-h-[calc(100svh_-_88.8px)] items-center px-4 py-20 sm:min-h-[calc(100svh_-_60.8px)]">
+      <Spinner theme="dark" className="mx-auto h-8 w-auto" />
+    </div>
+  );
+};
+
 function AppRoutes() {
+  const isAuth = useAuth();
   return (
     <BrowserRouter>
-      <Suspense
-        fallback={
-          <div className="min-h-[calc(100svh_-_148px)] px-4 py-8 lg:min-h-[calc(100svh_-_164px)]">
-            <Spinner theme="dark" className="mx-auto h-8 w-auto" />
-          </div>
-        }
-      >
+      <Suspense fallback={<Fallback />}>
         <Routes>
-          <Route
-            path="/upload"
-            element={
-              <Auth>
-                <Upload />
-              </Auth>
-            }
-          />
-          <Route path="/" element={<Landing />} />
-          <Route path="*" element={<Navigate to="/" replace={true} />} />
+          <Route path="/" element={isAuth ? <Upload /> : <Landing />} />
         </Routes>
       </Suspense>
     </BrowserRouter>

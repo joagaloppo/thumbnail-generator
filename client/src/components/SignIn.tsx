@@ -1,8 +1,7 @@
 import { useState } from 'react';
 import * as Dialog from '@radix-ui/react-dialog';
 import axios from 'axios';
-import Cookies from 'js-cookie';
-import { useNavigate } from 'react-router-dom';
+import { useCookies } from 'react-cookie';
 import Spinner from './Spinner';
 
 interface SignInProps {
@@ -13,7 +12,7 @@ interface SignInProps {
 }
 
 const SignIn: React.FC<SignInProps> = ({ open, setOpen, setSignUp }) => {
-  const navigate = useNavigate();
+  const [cookies, setCookie] = useCookies(['access_token']);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [username, setUsername] = useState('');
@@ -25,8 +24,8 @@ const SignIn: React.FC<SignInProps> = ({ open, setOpen, setSignUp }) => {
     setLoading(true);
     try {
       const res = await axios.post(`${import.meta.env.VITE_API_URL}/auth/login`, { userId: username, password });
-      Cookies.set('access_token', res.data.token);
-      navigate('/upload');
+      setCookie('access_token', res.data.token);
+      setOpen(false);
     } catch (err: any) {
       setError(err.response.data.message);
     } finally {
@@ -80,7 +79,7 @@ const SignIn: React.FC<SignInProps> = ({ open, setOpen, setSignUp }) => {
                 </div>
               )}
 
-              <form className="space-y-4" onSubmit={(e) => handleSubmit(e)}>
+              <form className="space-y-4 focus:outline-none" onSubmit={(e) => handleSubmit(e)}>
                 <input
                   type="text"
                   disabled={loading}
@@ -109,7 +108,7 @@ const SignIn: React.FC<SignInProps> = ({ open, setOpen, setSignUp }) => {
                   <button
                     disabled={loading}
                     type="submit"
-                    className="w-full rounded-full bg-primary py-2.5 text-center text-sm font-medium text-white hover:bg-primary-600 disabled:cursor-not-allowed disabled:opacity-50"
+                    className="w-full rounded-full bg-primary py-2.5 text-center text-sm font-medium text-white hover:bg-primary-900 disabled:cursor-not-allowed disabled:opacity-50"
                   >
                     <div className="flex w-full items-center justify-center gap-2 text-center">
                       <span>Sign In</span>
@@ -126,7 +125,7 @@ const SignIn: React.FC<SignInProps> = ({ open, setOpen, setSignUp }) => {
                         }}
                         className="text-primary underline-offset-2 hover:underline"
                       >
-                        Sign up
+                        Register
                       </button>
                     </p>
                   </div>

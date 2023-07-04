@@ -1,12 +1,13 @@
 import { useState, useEffect } from 'react';
-import Cookies from 'js-cookie';
+import { useCookies } from 'react-cookie';
 
 const useAuth = () => {
-  const [isAuth, setIsAuth] = useState(!!Cookies.get('access_token'));
+  const [cookies] = useCookies(['access_token']);
+  const [isAuth, setIsAuth] = useState(!!cookies.access_token);
 
   useEffect(() => {
-    setIsAuth(!!Cookies.get('access_token'));
-  }, []);
+    setIsAuth(!!cookies.access_token);
+  }, [cookies.access_token, cookies]);
 
   return isAuth;
 };

@@ -90,10 +90,10 @@ const DropZone: React.FC<DropZoneProps> = ({ setFile }) => {
 
   return (
     <>
-      <div className="mx-auto flex w-full max-w-2xl items-center justify-center">
+      <div className="mx-auto flex w-full items-center justify-center">
         <label
           className={clsx(
-            ' flex h-64 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 hover:bg-gray-100',
+            'flex h-64 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 hover:bg-gray-100',
             dragging && 'border-primary-300 bg-primary-100 text-primary hover:bg-blue-100'
           )}
           ref={dropRef}
